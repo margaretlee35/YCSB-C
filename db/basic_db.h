@@ -8,8 +8,10 @@
 
 #ifndef YCSB_C_BASIC_DB_H_
 #define YCSB_C_BASIC_DB_H_
+#define HALF_MAX_NUM_KEYS 32
 
 #include "core/db.h"
+#include "BTree/include/fc/btree.h"
 
 #include <iostream>
 #include <string>
@@ -22,10 +24,16 @@ using std::endl;
 namespace ycsbc {
 
 class BasicDB : public DB {
+ private:
+    frozenca::BTreeSet<std::string, HALF_MAX_NUM_KEYS> bt;
  public:
   void Init() {
     std::lock_guard<std::mutex> lock(mutex_);
     cout << "A new thread begins working." << endl;
+  }
+
+  void DestoryTree() {
+    bt.clear();
   }
 
   int Read(const std::string &table, const std::string &key,
@@ -42,7 +50,10 @@ class BasicDB : public DB {
     } else {
       cout  << " < all fields >" << endl;
     }*/
-    cout << "READ " << key << endl;
+    //cout << "READ " << key << endl;
+    if (!bt.contains(key)) {
+      cout << "NOT FOUND" << endl;
+    }
     return 0;
   }
 
@@ -84,7 +95,12 @@ class BasicDB : public DB {
       cout << v.first << '=' << v.second << ' ';
     }
     cout << ']' << endl;*/
-    cout << "INSERT " << key << endl;
+    // Commented out to avoid logging in loading phase
+    //cout << "INSERT " << key << endl;
+    bt.insert(key);
+    if (bt.size() % 1000000 == 0) {
+      cout << "bt.size(): " << bt.size() << endl;
+    }
     return 0;
   }
 

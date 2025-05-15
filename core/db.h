@@ -31,6 +31,11 @@ class DB {
   ///
   virtual void Close() { }
   ///
+  /// Destroys tree after all the transactions. Supported for basic DB only.
+  /// Called once per DB client (thread); there is a single DB instance globally.
+  ///
+  virtual void DestroyTree() { }
+  ///
   /// Reads a record from the database.
   /// Field/value pairs from the result are stored in a vector.
   ///

@@ -79,6 +79,7 @@ int main(const int argc, const char *argv[]) {
     actual_ops.emplace_back(async(launch::async,
         DelegateClient, db, &wl, total_ops / num_threads, false));
   }
+  db->DestroyTree();
   assert((int)actual_ops.size() == num_threads);
 
   sum = 0;
