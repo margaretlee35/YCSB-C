@@ -8,7 +8,7 @@
 
 #ifndef YCSB_C_BASIC_DB_H_
 #define YCSB_C_BASIC_DB_H_
-#define HALF_MAX_NUM_KEYS 16
+#define HALF_MAX_NUM_KEYS 32
 
 #include "core/db.h"
 #include "BTree/include/fc/btree.h"
